@@ -1,0 +1,24 @@
+{
+  "name": "west-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/rbln7/west-node.git"
+  },
+  "author": "Marko Rajevic",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/rbln7/west-node#readme",
+  "dependencies": {
+    "bluetooth-serial-port": "^2.2.3",
+    "express": "^4.16.4",
+    "firebase": "^5.9.4",
+    "firebase-admin": "^7.2.0",
+    "lodash": "^4.17.11",
+    "node-bluetooth": "^1.2.5"
+  }
+}
