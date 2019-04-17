@@ -5,7 +5,7 @@ const port = 4200
 const admin = require('firebase-admin');
 const bluetooth = require('node-bluetooth');
 const device = new bluetooth.DeviceINQ();
-let bluetoothName = 'Mi A1';
+let bluetoothName = 'HC-06';
 var serviceAccount = require('./cert/service.json');
 
 admin.initializeApp({
@@ -15,7 +15,7 @@ admin.initializeApp({
 var db = admin.firestore();
 var docRef = db.collection('lights').doc('status');
 let turnOfTheLights = (connection) => {
-    let numberOfFloors = _.range(41);
+    let numberOfFloors = _.range(3, 41);
     let numberOfApartments = _.range(11);
     let temp = [];
     _.each(numberOfFloors, floor => {
@@ -27,20 +27,21 @@ let turnOfTheLights = (connection) => {
             temp.push(floor + "Stan " + apartment + "0")
         });
     })
-
+    var offset = 0;
     _.each(temp, el => {
-        connection.write(new Buffer(el, 'utf-8'), () => {
-            console.log('el', el);
-        });
+        setTimeout(function () {
+            connection.write(new Buffer(el, 'utf-8'), () => {
+                console.log('el', el);
+            });
+        }, 1100 + offset);
+        offset += 1100;
     })
 }
 
 device.listPairedDevices(devices => {
     let bluDevice = _.find(devices, dev => dev.name == bluetoothName);
-    console.log('devicesss', bluDevice.address);
     device.findSerialPortChannel(bluDevice.address, function (channel) {
         console.log('Found RFCOMM channel for serial port on %s: ', channel);
-
         bluetooth.connect(bluDevice.address, channel, function (err, connection) {
             if (err) return console.error(err);
             docRef.onSnapshot((data) => {
@@ -48,8 +49,8 @@ device.listPairedDevices(devices => {
                 if (apartment == false || apartment == 'false') {
                     turnOfTheLights(connection);
                 } else {
-                    connection.write(new Buffer('Hello!', 'utf-8'), () => {
-
+                    connection.write(new Buffer(apartment, 'utf-8'), () => {
+                        console.log('apartment', apartment)
                     });
                 }
 
