@@ -5,7 +5,7 @@ const port = 4200
 const admin = require('firebase-admin');
 const bluetooth = require('node-bluetooth');
 const device = new bluetooth.DeviceINQ();
-let bluetoothName = 'JBL GO';
+let bluetoothName = 'Mi A1';
 var serviceAccount = require('./cert/service.json');
 
 admin.initializeApp({
@@ -14,6 +14,26 @@ admin.initializeApp({
 });
 var db = admin.firestore();
 var docRef = db.collection('lights').doc('status');
+let turnOfTheLights = (connection) => {
+    let numberOfFloors = _.range(41);
+    let numberOfApartments = _.range(11);
+    let temp = [];
+    _.each(numberOfFloors, floor => {
+        floor =
+            floor.toString().length == 1
+                ? 0 + floor.toString()
+                : floor;
+        _.each(numberOfApartments, apartment => {
+            temp.push(floor + "Stan " + apartment + "0")
+        });
+    })
+
+    _.each(temp, el => {
+        connection.write(new Buffer(el, 'utf-8'), () => {
+            console.log('el', el);
+        });
+    })
+}
 
 device.listPairedDevices(devices => {
     let bluDevice = _.find(devices, dev => dev.name == bluetoothName);
@@ -25,17 +45,16 @@ device.listPairedDevices(devices => {
             if (err) return console.error(err);
             docRef.onSnapshot((data) => {
                 let apartment = data.data().apartment;
-                connection.write(new Buffer('Hello!', 'utf-8'), () => {
-                    console.log("wrote");
-                });
-                connection.on('data', (buffer) => {
-                    console.log('received message:', buffer.toString());
-                });
+                if (apartment == false || apartment == 'false') {
+                    turnOfTheLights(connection);
+                } else {
+                    connection.write(new Buffer('Hello!', 'utf-8'), () => {
+
+                    });
+                }
 
             });
-
         });
-
     });
 });
 
