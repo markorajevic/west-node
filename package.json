@@ -14,7 +14,6 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/rbln7/west-node#readme",
   "dependencies": {
-    "bluetooth-serial-port": "^2.2.3",
     "express": "^4.16.4",
     "firebase": "^5.9.4",
     "firebase-admin": "^7.2.0",
