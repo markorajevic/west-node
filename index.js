@@ -29,7 +29,6 @@ let turnOfTheLights = (connection) => {
     })
     var offset = 0;
     connection.write(new Buffer('Clear', 'utf-8'), () => {
-        console.log('el', el);
     });
     // _.each(temp, el => {
     //     setTimeout(function () {
