@@ -24,18 +24,21 @@ let turnOfTheLights = (connection) => {
                 ? 0 + floor.toString()
                 : floor;
         _.each(numberOfApartments, apartment => {
-            temp.push(floor + "Stan " + apartment + "0")
+            temp.push(floor + "Stan " + apartment + "1")
         });
     })
     var offset = 0;
-    _.each(temp, el => {
-        setTimeout(function () {
-            connection.write(new Buffer(el, 'utf-8'), () => {
-                console.log('el', el);
-            });
-        }, 1100 + offset);
-        offset += 1100;
-    })
+    connection.write(new Buffer('Clear', 'utf-8'), () => {
+        console.log('el', el);
+    });
+    // _.each(temp, el => {
+    //     setTimeout(function () {
+    //         connection.write(new Buffer('Clear', 'utf-8'), () => {
+    //             console.log('el', el);
+    //         });
+    //     }, 1100 + offset);
+    //     offset += 1100;
+    // })
 }
 
 device.listPairedDevices(devices => {
