@@ -29,29 +29,9 @@ device.listPairedDevices(devices => {
             if (err) return console.error(err);
             docRef.onSnapshot((data) => {
                 let apartment = data.data().apartment;
-                let offApartments = data.data().previous;
-                let offChunk = chunkString(offApartments, 160);
-                let chunk = chunkString(apartment, 160);
-                    // var offApSet = 0;
-                    // _.each(offChunk, el => {
-                    //     setTimeout(function () {
-                    //         connection.write(new Buffer(el, 'utf-8'), () => {
-                    //             console.log('offOnes', el);
-                    //         });
-                    //     }, 1500 + offApSet);
-                    //     offApSet += 1500;
-                    // })
-                    var offset = 0;
-                    _.each(chunk, el => {
-                        // setTimeout(function () {
-                            connection.write(new Buffer(el, 'utf-8'), () => {
-                                console.log('newOnes', el);
-                            });
-                        // }, 1500 + offset);
-                        // offset += 1500;
-                    })
-
-
+                    connection.write(new Buffer(apartment, 'utf-8'), () => {
+                        console.log('newOnes', apartment);
+                    });
             });
         });
     });
